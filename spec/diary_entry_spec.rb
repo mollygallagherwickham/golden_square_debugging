@@ -33,9 +33,30 @@ RSpec.describe DiaryEntry do
         expect(diary_entry.reading_time(100)).to eq "4 minute(s)" 
     end
 
-    it "returns 10 words from contents based on 10 wpm" do
-        diary_entry = DiaryEntry.new("Dear Diary","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod urna")
-        expect(diary_entry.reading_chunk(10,1)).to eq "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod" 
+    it "returns error if wpm is 0" do
+        diary_entry = DiaryEntry.new("Dear Diary", 0)
+        expect{diary_entry.reading_time(0)}.to raise_error "Reading speed must be above zero." 
+    end
+
+    it "returns 5 words from contents based on 5 wpm" do
+        diary_entry = DiaryEntry.new("Dear Diary","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod")
+        chunk = diary_entry.reading_chunk(5, 1)
+        expect(chunk).to eq "Lorem ipsum dolor sit amet," 
+    end
+
+    it "returns remaining words from contents having read first 10 words in previous call" do
+        diary_entry = DiaryEntry.new("Dear Diary","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod")
+        diary_entry.reading_chunk(5, 1)
+        chunk = diary_entry.reading_chunk(5, 1)
+        expect(chunk).to eq "consectetur adipiscing elit. Etiam euismod" 
+    end
+
+    it "restarts after reading whole contents" do
+        diary_entry = DiaryEntry.new("Dear Diary","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod")
+        diary_entry.reading_chunk(5, 1)
+        diary_entry.reading_chunk(5, 1)
+        chunk = diary_entry.reading_chunk(5, 1)
+        expect(chunk).to eq "Lorem ipsum dolor sit amet,"
     end
 
 end
