@@ -33,4 +33,9 @@ RSpec.describe DiaryEntry do
         expect(diary_entry.reading_time(100)).to eq "4 minute(s)" 
     end
 
+    it "returns 10 words from contents based on 10 wpm" do
+        diary_entry = DiaryEntry.new("Dear Diary","Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod urna")
+        expect(diary_entry.reading_chunk(10,1)).to eq "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod" 
+    end
+
 end

@@ -39,5 +39,10 @@ class DiaryEntry
       # The next call after that it should restart from the beginning.
 
       # index numbers - make contents an array
+      words_allowed = wpm / minutes
+      @contents.split(" ").first(words_allowed).join(" ")
+
+
+
     end
   end
